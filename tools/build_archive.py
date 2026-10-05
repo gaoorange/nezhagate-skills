@@ -52,8 +52,8 @@ def build(skill_dir: Path) -> dict:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     skills = [build(d) for d in sorted((ROOT / 'skills').iterdir()) if (d / 'SKILL.md').is_file()]
-    (OUT / 'index.json').write_text(json.dumps({'$schema': SCHEMA, 'skills': skills}, ensure_ascii=False, indent=2) + '\n',
-                                    encoding='utf-8')
+    index = json.dumps({'$schema': SCHEMA, 'skills': skills}, ensure_ascii=False, indent=2) + '\n'
+    (OUT / 'index.json').write_bytes(index.encode('utf-8'))      # bytes: LF on every OS
     for s in skills:
         print(s['name'], s['digest'])
 

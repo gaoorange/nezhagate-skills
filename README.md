@@ -13,7 +13,7 @@ sends your files, waits for the job and saves the result.
 
 | Skill | What it does |
 |---|---|
-| [`nezhagate-seedance`](skills/nezhagate-seedance/SKILL.md) | Text-to-video and image-to-video with ByteDance **Seedance 2.5 / 2.0**: up to 30 reference images, reference videos and audio, 4-30 s, 480P / 720P / 1080P, native soundtrack. Includes a zero-dependency Python helper that submits, polls and downloads. |
+| [`nezhagate-seedance`](skills/nezhagate-seedance/SKILL.md) | Text-to-video and video from reference images, videos and audio with ByteDance **Seedance 2.5 / 2.0**, including the per-clip Seedance 2.0 Clip and Seedance 2.5 30s, native soundtrack. Includes a zero-dependency Python helper that lists the models on sale with live prices, checks the request before you pay, then submits, waits and downloads. |
 
 ## Install
 
@@ -57,10 +57,16 @@ turning to the camera on a rooftop at golden hour, slow dolly in, and save it to
 Or run the helper yourself:
 
 ```bash
+python skills/nezhagate-seedance/scripts/seedance.py --models      # models on sale, live prices
 python skills/nezhagate-seedance/scripts/seedance.py --model seedance-2.5 --image ./hero.png \
   --prompt "The woman from @Image1 turns to the camera on a rooftop at golden hour, slow dolly in" \
-  --duration 8 --ratio 16:9 --out ./out/rooftop.mp4
+  --duration 8 --ratio 16:9 --dry-run                              # check the request, submit nothing
+python skills/nezhagate-seedance/scripts/seedance.py --model seedance-2.5 --image ./hero.png \
+  --prompt "The woman from @Image1 turns to the camera on a rooftop at golden hour, slow dolly in" \
+  --duration 8 --ratio 16:9 --out ./out/rooftop.mp4                # submit, wait, download
 ```
+
+For a long or multi-line prompt, put it in a UTF-8 file and pass `--prompt-file prompt.txt` instead of `--prompt`.
 
 The prompt behind the demo clip:
 
@@ -72,11 +78,11 @@ The prompt behind the demo clip:
 ## How NezhaGate runs your jobs
 
 - **Failed renders cost nothing**: the amount is reserved at submit and refunded in full if a render fails.
-- **Your content stays yours**: prompts and outputs are never used for training, text logs are deleted after 15 days
-  and generated files after 60 days ([privacy policy](https://nezhagate.com/privacy)).
+- **Your content stays yours**: prompts and outputs are never used for training; the text of your calls is deleted
+  after 30 days and generated files after 60 days ([privacy policy](https://nezhagate.com/privacy)).
 - **Live status**: real success rates are published at <https://nezhagate.com/status>.
 
-Video is billed per second (or per clip for `seedance-2.5-30s`) in NezhaGate credits. Current prices:
+Some Seedance models bill per second and others per clip, in NezhaGate credits. Current prices: `--models` or
 <https://nezhagate.com/en/pricing>.
 
 ## For maintainers

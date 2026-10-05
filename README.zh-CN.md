@@ -11,7 +11,7 @@
 
 | Skill | 能做什么 |
 |---|---|
-| [`nezhagate-seedance`](skills/nezhagate-seedance/SKILL.md) | 用字节跳动 **Seedance 2.5 / 2.0** 做文生视频、图生视频：最多 30 张参考图，可加参考视频和音频，4–30 秒，480P / 720P / 1080P，自带配乐。附带一个零依赖的 Python 脚本，负责提交、等待和下载。 |
+| [`nezhagate-seedance`](skills/nezhagate-seedance/SKILL.md) | 用字节跳动 **Seedance 2.5 / 2.0** 做文生视频，或用参考图、参考视频、参考音频生成视频，包括按条计费的 Seedance 2.0 Clip 和 Seedance 2.5 30s，自带配乐。附带一个零依赖的 Python 脚本：列出在售型号和实时价格，付钱前先检查请求，再提交、等待和下载。 |
 
 详细的中文用法见 [skills/nezhagate-seedance/references/zh.md](skills/nezhagate-seedance/references/zh.md)。
 
@@ -53,13 +53,16 @@ setx NEZHAGATE_API_KEY "你的key"             # Windows（之后新开的窗口
 黄昏时分她在屋顶上转身看向镜头，镜头缓慢推近，存到 ./out/rooftop.mp4。
 ```
 
+也可以自己运行脚本：`--models` 查在售型号和价格，加 `--dry-run` 先检查请求（不提交、不花钱），
+长的或多行的提示词写进 UTF-8 文件后用 `--prompt-file` 传。
+
 ## NezhaGate 怎么对待你的任务
 
 - **失败不扣费**：提交时冻结费用，渲染失败全额退回。
-- **内容只属于你**：提示词和生成结果绝不用于训练；文字日志 15 天后删除，生成文件 60 天后删除（[隐私政策](https://nezhagate.com/privacy)）。
+- **内容只属于你**：提示词和生成结果绝不用于训练；调用的文字内容 30 天后删除，生成文件 60 天后删除（[隐私政策](https://nezhagate.com/privacy)）。
 - **状态公开**：真实成功率公布在 <https://nezhagate.com/status>。
 
-视频按秒计费（`seedance-2.5-30s` 按条计费），实时价格见 <https://nezhagate.com/pricing>。
+Seedance 有的型号按秒计费、有的按条计费，实时价格用 `--models` 查，或见 <https://nezhagate.com/pricing>。
 
 ## 许可
 

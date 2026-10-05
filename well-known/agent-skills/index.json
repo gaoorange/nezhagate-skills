@@ -4,9 +4,9 @@
     {
       "name": "nezhagate-seedance",
       "type": "archive",
-      "description": "Generate videos with ByteDance Seedance 2.5 and Seedance 2.0 through the NezhaGate API (https://nezhagate.com/v1) - text-to-video, image-to-video with up to 30 reference images, reference videos and audio, 4-30 seconds, 480P/720P/1080P, native soundtrack. Use when the user asks to make, render or script a Seedance video, mentions seedance / Seedance 2.5 / Seedance 2.0 / NezhaGate, or wants text-to-video, image-to-video or video generation from a coding agent. Covers model choice, limits, local files, submit, polling, download, cost and error handling.",
+      "description": "Generate videos with ByteDance Seedance (Seedance 2.5, Seedance 2.0, 2.0 Fast, 2.0 Clip, 2.5 30s) through the NezhaGate API (https://nezhagate.com/v1) - text-to-video and video from reference images, reference videos and reference audio. Use when the user asks to make, render or script a Seedance video, mentions seedance / Seedance 2.5 / Seedance 2.0 / NezhaGate, or wants text-to-video, image-to-video or video generation from a coding agent. Covers the live model list and prices, local reference files, a check before paying, submit, polling, download and error handling.",
       "url": "nezhagate-seedance.tar.gz",
-      "digest": "sha256:c7b2a5962196660868ff7a7d863db8ad7b26e1c641a31a6c78c1fbeb7a7d90b5"
+      "digest": "sha256:1e1d783df62370a4af24fc3d2e2b12e6cf72470aacde24e0d635139ad65ac0b8"
     }
   ]
 }
