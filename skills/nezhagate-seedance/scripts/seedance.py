@@ -38,7 +38,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 DEFAULT_BASE = 'https://nezhagate.com/v1'
 UA = 'nezhagate-seedance-skill/' + VERSION
 MB = 1024 * 1024
@@ -141,8 +141,9 @@ def build_body(a):
         body['resolution'] = a.resolution.upper()
     if a.ratio:
         body['size'] = a.ratio
-    if a.no_audio:
-        body['audio'] = False
+    if a.no_audio:   # 1.1.1: removed -- the clip always has sound (no effect on 2.5 / 2.0 / Fast, refused on Clip / 30s)
+        raise Fail(2, 'Seedance clips always come with sound and it cannot be switched off (--no-audio was removed). '
+                      'To keep voices out, leave dialogue, narration and lyrics out of the prompt.')
     video_bytes = 0
     if a.image:
         body['images'] = [media_item(s, 'image')[0] for s in a.image]
@@ -182,8 +183,6 @@ def check_request(body):
              'duration': body.get('duration', '(model default)'),
              'resolution': body.get('resolution', '(model default)'),
              'size': body.get('size', '(model default)')}
-    if 'audio' in body:
-        check['audio'] = body['audio']
     check.update({'prompt_chars': len(p), 'prompt_utf8_bytes': len(p.encode('utf-8')), 'prompt_lines': len(lines),
                   'prompt_first_line': clip_text(lines[0]), 'prompt_last_line': clip_text(lines[-1]),
                   'images': counts['image'], 'videos': counts['video'], 'audio_files': counts['audio'],
@@ -452,7 +451,7 @@ def main(argv=None):
     ap.add_argument('--duration', type=int, help='seconds (allowed values: see --doc)')
     ap.add_argument('--resolution', help='480P / 720P / 1080P, where the model offers it')
     ap.add_argument('--ratio', help='aspect ratio such as 16:9 or 9:16 (sent as size)')
-    ap.add_argument('--no-audio', action='store_true', help='no generated soundtrack (on models that offer the switch)')
+    ap.add_argument('--no-audio', action='store_true', help=argparse.SUPPRESS)   # removed in 1.1.1: clips always have sound
     ap.add_argument('--out', help='where to save the mp4 (default ./seedance-<job id>.mp4)')
     ap.add_argument('--dry-run', action='store_true', help='print the check and the request; submit nothing, no key needed')
     ap.add_argument('--force', action='store_true', help='submit even if the check found a problem')

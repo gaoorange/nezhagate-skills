@@ -27,11 +27,15 @@ and handle errors.
 5. **Images are references, never first frames.** No Seedance model on NezhaGate has first-frame or
    last-frame control: images set the characters, objects, scene and style. Name them in the prompt as
    `@Image1`, `@Image2`... in the order you send them, and likewise `@Video1`, `@Audio1`.
-6. **Out-of-range values are refused with HTTP 400 and a readable message, never silently changed.**
+6. **Every clip comes with sound, and it cannot be switched off.** The model writes dialogue, effects and
+   music from the prompt, so leave `audio` out: `false` has no effect on Seedance 2.5 / 2.0 / 2.0 Fast and
+   is refused on 2.0 Clip / 2.5 30s. Dialogue, narration and lyrics in the prompt are spoken or sung, and
+   the sound is reviewed like the picture; if the user wants no voices, keep them out of the prompt.
+7. **Out-of-range values are refused with HTTP 400 and a readable message, never silently changed.**
    Nothing is charged. Fix the request; do not resend the same body.
-7. **Failed jobs are refunded in full.** A `content_policy` failure is final for that content: change the
+8. **Failed jobs are refunded in full.** A `content_policy` failure is final for that content: change the
    prompt or references instead of resubmitting.
-8. **Download the result right away.** Result links are kept for 60 days; reference files NezhaGate hosts
+9. **Download the result right away.** Result links are kept for 60 days; reference files NezhaGate hosts
    for you are kept for 7 days.
 
 ## Check before you pay
@@ -93,7 +97,7 @@ curl -s https://nezhagate.com/v1/dashboard/billing/credit_grants -H "Authorizati
 | `duration` | integer | Seconds. Alias `seconds`. |
 | `resolution` | string | `480P` / `720P` / `1080P`, where the model offers it. |
 | `size` | string | Aspect ratio such as `16:9` or `9:16`. Alias `aspect_ratio`. |
-| `audio` | boolean | Generated soundtrack on or off, on models that offer the switch. |
+| `audio` | boolean | Leave it out. Every Seedance clip has sound and it cannot be switched off: `false` has no effect on 2.5 / 2.0 / 2.0 Fast and is refused on 2.0 Clip / 2.5 30s. |
 | `image` | string | One reference image. |
 | `images` | array | Several reference images, `@Image1`, `@Image2`... in this order. Alias `reference_images`. |
 | `video_references` | array | Reference videos (motion, camera), on models that take them. |
@@ -154,7 +158,7 @@ Failed job (`status=failed`, look at `error.code`):
 
 | `error.code` | Meaning | Resubmit? |
 |---|---|---|
-| `content_policy` | The content was refused by review | No - change the prompt or references |
+| `content_policy` | The content was refused by review; `error.param` = `audio` means the sound failed (the soundtrack written from the prompt, or your reference audio) | No - change the prompt or references |
 | `render_timeout`, `upstream_unstable`, `wait_timeout` | The render did not finish (not caused by the input) | Yes, as is |
 | `result_fetch_failed` | The video was rendered but its file could not be retrieved (not caused by the input) | Yes, as is |
 | `invalid_material` | A reference or the prompt could not be used (unsupported or broken file, overlong prompt, a restricted real-person likeness) | Fix the material first |
@@ -178,7 +182,7 @@ python scripts/seedance.py --balance
 ```
 
 Other options: `--prompt` (a short one-line prompt), `--video` / `--audio` (reference files),
-`--resolution`, `--no-audio`, `--force`, `--no-wait`, `--timeout` (seconds to wait, default 3600),
+`--resolution`, `--force`, `--no-wait`, `--timeout` (seconds to wait, default 3600),
 `--poll`. `--image`, `--video` and `--audio` take several files at once or can be repeated; their order
 is the `@Image1`, `@Image2`... order.
 
